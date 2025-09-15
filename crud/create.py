@@ -1,9 +1,11 @@
 from models import Place, User
+from geoalchemy2.shape import from_shape
+from shapely.geometry import Point
 
 def create_place(session, name, lon, lat):
     try:
-        wkt_point = f"SRID=4326;POINT({lon} {lat})"
-        new_place = Place(name=name, location=wkt_point)
+        geom = from_shape(Point(lon, lat), srid=4326)
+        new_place = Place(name=name, location=geom)
         session.add(new_place)
         session.commit()
         session.refresh(new_place)
