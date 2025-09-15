@@ -1,5 +1,5 @@
 from db import SessionLocal
-from crud.create import create_place
+from crud.create import create_place, create_user
 from crud.read import get_places
 from crud.update import update_place_name
 from crud.delete import delete_place
@@ -7,8 +7,12 @@ from crud.delete import delete_place
 session = SessionLocal()
 
 # Create Usage
-# place = create_place(session, "Central Park", -73.97, 40.77)
+# place = create_u(session, "Central Park", -73.97, 40.77)
 # print(f"Created place: {place.id}, {place.name}")
+
+# Tambah user baru
+user = create_user(session, name="Willy", is_active=True)
+print(user.id, user.name, user.is_active)
 
 # # Read
 # places = get_places(session)

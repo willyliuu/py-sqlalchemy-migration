@@ -21,6 +21,8 @@ depends_on: Union[str, Sequence[str], None] = None
 
 def upgrade() -> None:
     """Upgrade schema."""
+    op.execute("CREATE EXTENSION IF NOT EXISTS postgis")
+    
     op.create_table(
         "users",
         sa.Column("id", sa.Integer, primary_key=True),

@@ -6,6 +6,14 @@ import datetime
 
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(50), nullable=False)
+    is_active = Column(Boolean, default=True)  # Boolean column
+    created_at = Column(Date, default=datetime.date.today)  # Date column
+
 class Place(Base):
     __tablename__ = "places"
 
@@ -14,14 +22,6 @@ class Place(Base):
 
     # Spatial column (POINT with SRID 4326 - GPS coordinates)
     location = Column(Geometry(geometry_type="POINT", srid=4326))
-
-class User(Base):
-    __tablename__ = "users"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(50), nullable=False)
-    is_active = Column(Boolean, default=True)  # Boolean column
-    created_at = Column(Date, default=datetime.date.today)  # Date column
 
 class SpatialFeature(Base):
     __tablename__ = "spatial_features"
