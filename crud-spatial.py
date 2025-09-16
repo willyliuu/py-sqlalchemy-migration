@@ -37,11 +37,14 @@ def create_feature():
         session.close()
 
 
-def read_features():
+def read_feature():
   try:
     session = SessionLocal()
-    features = session.query(SpatialFeature).all()
-    return features
+    feature = session.query(SpatialFeature).first()
+    point = to_shape(feature.point)
+    line = to_shape(feature.line)
+    polygon = to_shape(feature.polygon)
+    return point, line, polygon
   except Exception as e:
     print(f"Error occurred: {e}")
     return []
@@ -49,14 +52,15 @@ def read_features():
     session.close()
 
 
-def update_feature(feature_id, new_name):
+def update_feature(feature_id, new_point, new_line, new_polygon):
     try:
         session = SessionLocal()
         feature = session.query(SpatialFeature).filter(SpatialFeature.id == feature_id).first()
         if feature:
-            feature.name = new_name
+            feature.point = from_shape(new_point, srid=4326)
+            feature.line = from_shape(new_line, srid=4326)
+            feature.polygon = from_shape(new_polygon, srid=4326)
             session.commit()
-            print(f"Updated feature {feature_id} name to {new_name}")
         else:
             print("Feature not found")
     except Exception as e:
@@ -85,8 +89,8 @@ def delete_feature(feature_id):
 # ---- Run Example ----
 if __name__ == "__main__":
     feature_id = create_feature()
-    read_features()
+    read_feature()
     update_feature(feature_id, "Updated Feature")
-    read_features()
+    read_feature()
     delete_feature(feature_id)
-    read_features()
+    read_feature()
